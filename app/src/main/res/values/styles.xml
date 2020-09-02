@@ -1,0 +1,15 @@
+<resources>
+
+    <!-- Tema de aplicativo base. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
+        <!-- Personalize o tema aqui. -->
+        <!--<item name="colorPrimary">@color/colorPrimary</item>-->
+        <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+        <!--<item name="colorAccent">@color/colorAccent</item>-->
+        <!--<item name="android:windowBackground">@color/colorPrimary</item>-->
+
+        <!--Necessário para o fragmento de preferências-->
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+    </style>
+
+</resources>

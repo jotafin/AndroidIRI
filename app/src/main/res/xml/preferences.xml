@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+            android:title="Logging">
+
+        <SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="preference_logging_units"
+            android:summary="Metros / pés"
+            android:title="Unidade" />
+
+        <!--TODO: inputType não funciona com PreferenceFragmentCompat-->
+        <EditTextPreference
+            android:defaultValue="1000"
+            android:dialogMessage="Recomendado entre 100 e 1000 metros."
+            android:inputType="number"
+            android:key="preference_logging_distance"
+            android:summary="Distância da estrada à aceleração média."
+            android:title="Registro de Distância" />
+
+        <EditTextPreference
+            android:defaultValue="80"
+            android:dialogMessage="Recomendado 80mph"
+            android:inputType="number"
+            android:key="preference_logging_max_speed"
+            android:summary="Não registra acima dessa velocidade."
+            android:title="Velocidade Máxima" />
+
+
+        <EditTextPreference
+            android:defaultValue="20"
+            android:dialogMessage="Recomendado 20mph"
+            android:inputType="number"
+            android:key="preference_logging_min_speed"
+            android:summary="Não registra abaixo dessa velocidade."
+            android:title="Velocidade mínima" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Arquivo de Log">
+
+        <SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="preference_filename_json"
+            android:summary="Alterna entre geoJSON e Esri JSON."
+            android:title="Habilita Esri JSON" />
+
+        <EditTextPreference
+            android:defaultValue="IRICalculado"
+            android:dialogMessage="Nome do arquivo incluirá prefixo + data do registro."
+            android:key="preference_filename_prefix"
+            android:summary="Prefixo do nome do arquivo de saída"
+            android:title="Salvar Arquivo " />
+    </PreferenceCategory>
+
+</PreferenceScreen>
+

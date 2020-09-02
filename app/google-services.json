@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "37450579731",
+    "firebase_url": "https://calculariri.firebaseio.com",
+    "project_id": "calculariri",
+    "storage_bucket": "calculariri.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:37450579731:android:fa393885978aaed58824e6",
+        "android_client_info": {
+          "package_name": "com.northbridgeanalytics.mysensors"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "37450579731-0232o1asoj3dfgs0vm68g125i7cikq98.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.northbridgeanalytics.mysensors",
+            "certificate_hash": "db2293e2f4bfa49ebb7c295da19536676f62bfeb"
+          }
+        },
+        {
+          "client_id": "37450579731-1vn14me6uanu1g458u2hisv6ika7j9r9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcp7bclDrPCLAnOJ7gIyYqgJTd1V6efeA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "37450579731-1vn14me6uanu1g458u2hisv6ika7j9r9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

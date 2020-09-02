@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Calcular IRI</string>
+    <string name="value_format">%1$.2f</string>
+    <string name="label_azimuth_string">Direção Horizontal:</string>
+    <string name="label_pitch_string">Inclinação:</string>
+    <string name="label_roll_string">Rotação:</string>
+    <string name="dialog_gps_setting">
+        Parece que você não tem o GPS ativado. Deseja ativá-lo em Configurações?
+    </string>
+    <string name="settings">Configurações</string>
+    <string name="cancel">Cancelar</string>
+
+    <!-- TODO: remover ou alterar este texto de espaço reservado -->
+    <string name="hello_blank_fragment"> fragmento em branco </string>
+</resources>
