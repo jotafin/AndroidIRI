@@ -15,6 +15,7 @@ import com.google.gson.internal.JsonReaderInternalAccess;
 import com.northbridgeanalytics.mysensors.R;
 
 import java.io.*;
+import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -125,6 +126,7 @@ public class SegmentHandler {
         MyPOJO myPOJO = gson.fromJson(jsonString, MyPOJO.class);
         referencia.setValue(myPOJO);
          */
+
 
         // Precisam de tempo entre os eventos do acelerômetro para calcular o IRI.
         // TODO: Verify what time this is.
@@ -322,7 +324,6 @@ public class SegmentHandler {
 
         Log.i("IRI", "Xphone " + totalIRIPhone[0] + " Yphone " + totalIRIPhone[1] + " Zphone " + totalIRIPhone[2] +
                 " XEarth " + totalIRIEarth[0] + " YEarth " + totalIRIEarth[1] + " ZEarth " + totalIRIEarth[2]);
-
         // Vamos passar os dados do segmento para o SurfaceDoctorEvent para que possam ser usados na atividade principal.
         // O SurfaceDoctorEvent será acionado na MainActivity.
         if (listener != null) {
@@ -335,8 +336,10 @@ public class SegmentHandler {
             // TODO: atribua saída à classe SurfaceDoctorEvent.
             listener.onSurfaceDoctorEvent(e);
         }
-
         saveResults(id, distance, totalIRIPhone, totalIRIEarth, polyline, tableString.toString());
+
+        String jsonContent = " id: "+ id + " distancia: "+ distance + " TotalIRIPhone0: " + totalIRIPhone[0] + " TotalIRIPhone1: " + totalIRIPhone[1] + " TotalIRIPhone2: " + totalIRIPhone[2] + " TotalIRIEarth0: "+ totalIRIEarth[0] +" TotalIRIEarth1: "+ totalIRIEarth[1] + " TotalIRIEarth2: "+ totalIRIEarth[2] +" Polypine: " + polyline + " tableString: " + tableString.toString();
+        referencia.push().setValue(jsonContent);
     }
 
 
@@ -375,7 +378,6 @@ public class SegmentHandler {
                 fstream.write(str.toString());
                 fstream.flush();
                 fstream.close();
-
             } catch (IOException e) {
                 Log.e("ERROR", "Failed to create file with error:\n");
             }
@@ -401,7 +403,6 @@ public class SegmentHandler {
         }
 
     }
-
 
     private boolean isWithinSpeed( float inputSpeed ) {
         // TODO: É necessário manipular quais unidades o usuário selecionou.
@@ -462,7 +463,7 @@ public class SegmentHandler {
      * @return
      */
     private File getPrivateStorageDirectory(Context context, String fileName) {
-        File file = new File(context.getExternalFilesDir("geoJson"), fileName);
+        File file = new File(context.getExternalFilesDir("geojson"), fileName);
         return file;
     }
 }
