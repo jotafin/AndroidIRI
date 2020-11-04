@@ -28,8 +28,15 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
+import api.IRIService;
+import bmodel.IRI;
 import myAlerts.AlertDialogGPS;
 import SurfaceDoctor.VectorAlgebra;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import android.Manifest;
 import android.content.Context;
@@ -119,6 +126,8 @@ public class MainActivity extends AppCompatActivity
 
     private MapView osm;
     private MapController mc;
+    // retrofit
+    private Retrofit retrofit;
 
     // Valores muito pequenos para o acelerômetro (nos três eixos) devem ser interpretados como 0. Este valor é a quantidade de desvio diferente de zero aceitável.
     private static final float VALUE_DRIFT = 0.05f;
@@ -164,6 +173,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onClick(View v) {
 
+            recuperarIRIRetrofit();
             // TODO: O usuário precisa de feedback visual do estado atual do botão.
             // TODO: Os booleanos precisam ser movidos para o final da função. Eles podem ser um retorno da função?
             if (!isToggleRecordingButtonClicked) {
@@ -192,11 +202,16 @@ public class MainActivity extends AppCompatActivity
         Context ctx = getApplicationContext();
         Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
 
+        retrofit = new Retrofit.Builder()
+                .baseUrl("http://191.252.223.6.xip.io:10000/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        /*
         //Carregando conteudo do geogson
         String jsonContent = "{\"type\": \"FeatureCollection\", \"features\": [{\"type\": \"Feature\", \"geometry\":" +
                 "{ \"type\": \"LineString\",\"coordinates\":[[-36.49172275, -8.90747133], [-36.49179834, -8.90752881], " +
@@ -211,7 +226,7 @@ public class MainActivity extends AppCompatActivity
         referencia.child(String.valueOf(R.xml.preferences));
         referencia.push().setValue(jsonContent);
 
-
+        */
         // Cadastro de usuario
         // usuario.createUserWithEmailAndPassword();
 /*
@@ -328,7 +343,26 @@ public class MainActivity extends AppCompatActivity
         osm.invalidate();
     }
 */
+                                        // RETROFIT
+    public void recuperarIRIRetrofit(){
+        IRIService iriService = retrofit.create(IRIService.class);
+        Call<IRI> call = iriService.recuperarIRI();
 
+        //criar a requisição
+        call.enqueue(new Callback<IRI>() {
+            @Override
+            public void onResponse(Call<IRI> call, Response<IRI> response) {
+                if( response.isSuccessful() ){
+                    IRI iri = response.body();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<IRI> call, Throwable t) {
+
+            }
+        });
+    }
     /**
      * Os ouvintes dos sensores são registrados neste retorno de chamada para que
      * eles podem não ser registrados em onStop ().
@@ -843,7 +877,6 @@ public class MainActivity extends AppCompatActivity
         point.add(end);
         Road road = roadManager.getRoad(point);
         final Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
-
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

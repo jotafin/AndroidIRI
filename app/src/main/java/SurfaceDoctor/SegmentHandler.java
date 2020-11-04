@@ -23,11 +23,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class SegmentHandler {
 
 
     // salvar dados no firebase e recuperar a referencia para a raiz do firebase
     private DatabaseReference referencia = FirebaseDatabase.getInstance().getReference("/segmenthandler");
+
+    // retrofit
+    private Retrofit retrofit;
 
 
     // Parâmetros de entrada do usuário padrão.
@@ -340,6 +346,14 @@ public class SegmentHandler {
 
         String jsonContent = " id: "+ id + " distancia: "+ distance + " TotalIRIPhone0: " + totalIRIPhone[0] + " TotalIRIPhone1: " + totalIRIPhone[1] + " TotalIRIPhone2: " + totalIRIPhone[2] + " TotalIRIEarth0: "+ totalIRIEarth[0] +" TotalIRIEarth1: "+ totalIRIEarth[1] + " TotalIRIEarth2: "+ totalIRIEarth[2] +" Polypine: " + polyline + " tableString: " + tableString.toString();
         referencia.push().setValue(jsonContent);
+        /*
+        // CONFIGURAÇÃO DO RETROFIT E DO CONVERSOR - usando o retrofit para api rest
+        retrofit = new Retrofit.Builder()
+                .baseUrl("http://191.252.223.6.xip.io:10000/docs/swagger-ui/index.html?configUrl=/docs/api/swagger-config#/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+         */
     }
 
 
