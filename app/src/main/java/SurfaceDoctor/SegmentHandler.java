@@ -23,6 +23,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import api.IRIService;
+import bmodel.IRI;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -34,7 +39,6 @@ public class SegmentHandler {
 
     // retrofit
     private Retrofit retrofit;
-
 
     // Parâmetros de entrada do usuário padrão.
     private boolean units = true;
@@ -121,17 +125,11 @@ public class SegmentHandler {
      */
     public void setSurfaceDoctorAccelerometer(SensorEvent sensorEvent) {
 
-
-        referencia.child(String.valueOf(R.xml.preferences));
-        //referencia.push().setValue("dados");
-
-
-        /*
-        Gson gson = new Gson();
-        String jsonString = null;
-        MyPOJO myPOJO = gson.fromJson(jsonString, MyPOJO.class);
-        referencia.setValue(myPOJO);
-         */
+        // CONFIGURAÇÃO DO RETROFIT E DO CONVERSOR - usando o retrofit para api rest
+        retrofit = new Retrofit.Builder()
+                .baseUrl("http://191.252.223.6.xip.io:10000/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
 
         // Precisam de tempo entre os eventos do acelerômetro para calcular o IRI.
@@ -344,18 +342,38 @@ public class SegmentHandler {
         }
         saveResults(id, distance, totalIRIPhone, totalIRIEarth, polyline, tableString.toString());
 
-        String jsonContent = " id: "+ id + " distancia: "+ distance + " TotalIRIPhone0: " + totalIRIPhone[0] + " TotalIRIPhone1: " + totalIRIPhone[1] + " TotalIRIPhone2: " + totalIRIPhone[2] + " TotalIRIEarth0: "+ totalIRIEarth[0] +" TotalIRIEarth1: "+ totalIRIEarth[1] + " TotalIRIEarth2: "+ totalIRIEarth[2] +" Polypine: " + polyline + " tableString: " + tableString.toString();
-        referencia.push().setValue(jsonContent);
-        /*
-        // CONFIGURAÇÃO DO RETROFIT E DO CONVERSOR - usando o retrofit para api rest
-        retrofit = new Retrofit.Builder()
-                .baseUrl("http://191.252.223.6.xip.io:10000/docs/swagger-ui/index.html?configUrl=/docs/api/swagger-config#/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+       // String jsonContent =" coordenadas"+ segmentCoordinates.toString() + " id: "+ id + " distancia: "+ distance + " TotalIRIPhone0: " + totalIRIPhone[0] + " TotalIRIPhone1: " + totalIRIPhone[1] + " TotalIRIPhone2: " + totalIRIPhone[2] + " TotalIRIEarth0: "+ totalIRIEarth[0] +" TotalIRIEarth1: "+ totalIRIEarth[1] + " TotalIRIEarth2: "+ totalIRIEarth[2] +" Polypine: " + polyline + " tableString: " + tableString.toString();
+       // referencia.push().setValue(jsonContent);
 
-         */
+        // Enviando para a API
+        salvarIRI();
+
     }
+    // RETROFIT SALVANDO IRI
+    private void salvarIRI(){
+        //configura objeto IRI
+      IRI iri = new IRI("123", "TESTSEGMENTHANDLER", "ulalau" );
+        //recupera o servico e salva a postagem
+        IRIService service = retrofit.create(IRIService.class);
+        Call<IRI> call = service.salvarIRI(iri);
 
+        call.enqueue(new Callback<IRI>() {
+            @Override
+            public void onResponse(Call<IRI> call, Response<IRI> response) {
+                if( response.isSuccessful()){
+                    IRI iriResposta = response.body();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<IRI> call, Throwable t) {
+
+            }
+        });
+
+
+    }
 
     private void saveResults(String id, double distance, double[] phoneIRI, double[] earthIRI, ArrayList<double[]> polyline, String table) {
         // TODO: em vez de um arquivo por segmento, acrescente vários segmentos a um arquivo.

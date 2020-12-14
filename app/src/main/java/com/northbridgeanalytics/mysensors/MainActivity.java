@@ -30,6 +30,7 @@ import android.view.WindowManager;
 
 import api.IRIService;
 import bmodel.IRI;
+import bmodel.ListaIRI;
 import myAlerts.AlertDialogGPS;
 import SurfaceDoctor.VectorAlgebra;
 import retrofit2.Call;
@@ -128,6 +129,7 @@ public class MainActivity extends AppCompatActivity
     private MapController mc;
     // retrofit
     private Retrofit retrofit;
+    private List<ListaIRI> listaIri = new ArrayList<>();
 
     // Valores muito pequenos para o acelerômetro (nos três eixos) devem ser interpretados como 0. Este valor é a quantidade de desvio diferente de zero aceitável.
     private static final float VALUE_DRIFT = 0.05f;
@@ -173,7 +175,8 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onClick(View v) {
 
-            recuperarIRIRetrofit();
+            salvarIRI();
+            recuperarIRI();
             // TODO: O usuário precisa de feedback visual do estado atual do botão.
             // TODO: Os booleanos precisam ser movidos para o final da função. Eles podem ser um retorno da função?
             if (!isToggleRecordingButtonClicked) {
@@ -202,6 +205,7 @@ public class MainActivity extends AppCompatActivity
         Context ctx = getApplicationContext();
         Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
 
+        //retrofit
         retrofit = new Retrofit.Builder()
                 .baseUrl("http://191.252.223.6.xip.io:10000/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -294,6 +298,9 @@ public class MainActivity extends AppCompatActivity
         mc.animateTo(center);
         addMarker(center);
             */
+        //RETROFIT
+        recuperarListasIRIRetrofit();
+
         // Bloqueia a orientação para retrato
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -343,8 +350,33 @@ public class MainActivity extends AppCompatActivity
         osm.invalidate();
     }
 */
+    // RETROFIT SALVANDO IRI
+    private void salvarIRI(){
+        //configura objeto IRI
+        IRI iri = new IRI("0.0012312", "testeAPPANDROID", "testando" );
+        //recupera o servico e salva a postagem
+        IRIService service = retrofit.create(IRIService.class);
+        Call<IRI> call = service.salvarIRI(iri);
+
+        call.enqueue(new Callback<IRI>() {
+            @Override
+            public void onResponse(Call<IRI> call, Response<IRI> response) {
+                if( response.isSuccessful()){
+                    IRI iriResposta = response.body();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<IRI> call, Throwable t) {
+
+            }
+        });
+
+
+    }
                                         // RETROFIT
-    public void recuperarIRIRetrofit(){
+    public void recuperarIRI(){
         IRIService iriService = retrofit.create(IRIService.class);
         Call<IRI> call = iriService.recuperarIRI();
 
@@ -359,6 +391,29 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onFailure(Call<IRI> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void recuperarListasIRIRetrofit(){
+        IRIService service = retrofit.create(IRIService.class);
+        Call<List<ListaIRI>> call = service.recuperarListaIRI();
+
+        call.enqueue(new Callback<List<ListaIRI>>() {
+            @Override
+            public void onResponse(Call<List<ListaIRI>> call, Response<List<ListaIRI>> response) {
+                if( response.isSuccessful()){
+                    listaIri = response.body();
+
+                    for (int i=0; i<listaIri.size(); i++){
+                        ListaIRI listaIRI = listaIri.get( i );
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ListaIRI>> call, Throwable t) {
 
             }
         });
