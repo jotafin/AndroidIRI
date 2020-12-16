@@ -326,6 +326,19 @@ public class SegmentHandler {
         totalIRIEarth[1] = (totalVerticalDisplacementEarth[1] * 1000) / distance;
         totalIRIEarth[2] = (totalVerticalDisplacementEarth[2] * 1000) / distance;
 
+        /////// tentando media - QUALQUER coisa excluir essa parte ate embaixo do string iriMedia
+        double irimedia;
+        double t1, t2, t3;
+        t1 = totalIRIPhone[0];
+        t2 = totalIRIPhone[1];
+        t3 = totalIRIPhone[2];
+
+        irimedia = (t1 + t2 + t3)/3;
+        // COnvertendo a media para string
+        String iriMedia = Double.toString(irimedia);
+        String test = null;
+        ///////////////////
+
         Log.i("IRI", "Xphone " + totalIRIPhone[0] + " Yphone " + totalIRIPhone[1] + " Zphone " + totalIRIPhone[2] +
                 " XEarth " + totalIRIEarth[0] + " YEarth " + totalIRIEarth[1] + " ZEarth " + totalIRIEarth[2]);
         // Vamos passar os dados do segmento para o SurfaceDoctorEvent para que possam ser usados na atividade principal.
@@ -343,16 +356,19 @@ public class SegmentHandler {
         saveResults(id, distance, totalIRIPhone, totalIRIEarth, polyline, tableString.toString());
 
        // String jsonContent =" coordenadas"+ segmentCoordinates.toString() + " id: "+ id + " distancia: "+ distance + " TotalIRIPhone0: " + totalIRIPhone[0] + " TotalIRIPhone1: " + totalIRIPhone[1] + " TotalIRIPhone2: " + totalIRIPhone[2] + " TotalIRIEarth0: "+ totalIRIEarth[0] +" TotalIRIEarth1: "+ totalIRIEarth[1] + " TotalIRIEarth2: "+ totalIRIEarth[2] +" Polypine: " + polyline + " tableString: " + tableString.toString();
-       // referencia.push().setValue(jsonContent);
+           String jsonContent ="IRI TOTAL: " + iriMedia ;
+            referencia.push().setValue(jsonContent);
 
         // Enviando para a API
-        salvarIRI();
+        salvarIRI(iriMedia, test, id);
+        // (iriMedia, id, test) parte adicionada, qlqr coisa so deixar o () vazio, "()"
 
     }
     // RETROFIT SALVANDO IRI
-    private void salvarIRI(){
+    private void salvarIRI(String iriMedia, String test, String id ){
         //configura objeto IRI
-      IRI iri = new IRI("123", "TESTSEGMENTHANDLER", "ulalau" );
+
+      IRI iri = new IRI(iriMedia, test, id );
         //recupera o servico e salva a postagem
         IRIService service = retrofit.create(IRIService.class);
         Call<IRI> call = service.salvarIRI(iri);
