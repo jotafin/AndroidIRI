@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onClick(View v) {
 
-            salvarIRI();
+            // salvarIRI();
             recuperarIRI();
             // TODO: O usuário precisa de feedback visual do estado atual do botão.
             // TODO: Os booleanos precisam ser movidos para o final da função. Eles podem ser um retorno da função?
@@ -351,14 +351,15 @@ public class MainActivity extends AppCompatActivity
     }
 */
     // RETROFIT SALVANDO IRI
+    /*
     private void salvarIRI(){
         //configura objeto IRI
-        IRI iri = new IRI("0.0012312", "testeAPPANDROID", "testando" );
+       // IRI iri = new IRI("0.0012312", "testeAPPANDROID", "testando" );
         //recupera o servico e salva a postagem
         IRIService service = retrofit.create(IRIService.class);
-        Call<IRI> call = service.salvarIRI(iri);
+       // Call<IRI> call = service.salvarIRI(iri);
 
-        call.enqueue(new Callback<IRI>() {
+         // call.enqueue(new Callback<IRI>() {
             @Override
             public void onResponse(Call<IRI> call, Response<IRI> response) {
                 if( response.isSuccessful()){
@@ -374,7 +375,7 @@ public class MainActivity extends AppCompatActivity
         });
 
 
-    }
+    }*/
                                         // RETROFIT
     public void recuperarIRI(){
         IRIService iriService = retrofit.create(IRIService.class);
@@ -607,7 +608,7 @@ public class MainActivity extends AppCompatActivity
             segmentHandler = new SegmentHandler(this, SensorManager);
             segmentHandler.setSomeEventListener(this);
             System.out.println("TENTANDO SALVAR DADOS EXTERNAMENTE");
-            segmentHandler.savingDataOnFirebase();
+            //segmentHandler.savingDataOnFirebase();
         }
     }
 

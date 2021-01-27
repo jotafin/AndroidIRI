@@ -1,47 +1,123 @@
 package bmodel;
 
+
 public class IRI {
-
     private String iri;
-    private String endereco;
+    private double lati;
+    private double longi;
+    private double latf;
+    private double longf;
     private String nome;
-    private Long id;
+    private String id;
 
-    public IRI(String iri, String endereco, String nome) {
+
+
+    /**
+     * @param iri
+     * @param lati
+     * @param longi
+     * @param latf
+     * @param longf
+     * @param id
+     */
+    public IRI(String iri, double lati, double longi, double latf, double longf, String id) {
+        super();
         this.iri = iri;
-        this.endereco = endereco;
-        this.nome = nome;
+        this.lati = lati;
+        this.longi = longi;
+        this.latf = latf;
+        this.longf = longf;
+        this.id = id;
     }
 
+    /**
+     * @return the iri
+     */
     public String getIri() {
         return iri;
     }
-
+    /**
+     * @param iri the iri to set
+     */
     public void setIri(String iri) {
         this.iri = iri;
     }
 
-    public String getEndereco() {
-        return endereco;
+    /**
+     * @return the lati
+     */
+    public double getLati() {
+        return lati;
     }
-
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
+    /**
+     * @param lati the lati to set
+     */
+    public void setLati(double lati) {
+        this.lati = lati;
     }
-
+    /**
+     * @return the longi
+     */
+    public double getLongi() {
+        return longi;
+    }
+    /**
+     * @param longi the longi to set
+     */
+    public void setLongi(double longi) {
+        this.longi = longi;
+    }
+    /**
+     * @return the latf
+     */
+    public double getLatf() {
+        return latf;
+    }
+    /**
+     * @param latf the latf to set
+     */
+    public void setLatf(double latf) {
+        this.latf = latf;
+    }
+    /**
+     * @return the longf
+     */
+    public double getLongf() {
+        return longf;
+    }
+    /**
+     * @param longf the longf to set
+     */
+    public void setLongf(double longf) {
+        this.longf = longf;
+    }
+    /**
+     * @return the nome
+     */
     public String getNome() {
         return nome;
     }
-
+    /**
+     * @param nome the nome to set
+     */
     public void setNome(String nome) {
         this.nome = nome;
     }
-
-    public Long getId() {
+    /**
+     * @return the id
+     */
+    public String getId() {
         return id;
     }
-
-    public void setId(Long id) {
+    /**
+     * @param id the id to set
+     */
+    public void setId(String id) {
         this.id = id;
     }
+
+
 }
+
+
+

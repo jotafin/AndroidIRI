@@ -82,7 +82,7 @@ public class SegmentHandler {
         this.context = context;
         sensorManager = sm;
     }
-
+    /*
     public void savingDataOnFirebase() {
         //Carregando conteudo do geogson
         String jsonContent = "{\"type\": \"FeatureCollection\", \"features\": [{\"type\": \"Feature\", \"geometry\":" +
@@ -98,8 +98,7 @@ public class SegmentHandler {
         referencia.child(String.valueOf(R.xml.preferences));
         referencia.push().setValue(jsonContent);
     }
-
-
+    */
     /**
      * Método para definir as configurações do SurfaceDoctor que foram definidas pelo usuário.
      *
@@ -236,6 +235,8 @@ public class SegmentHandler {
         double[] coordinatesStart = new double[]{ locationStart.getLongitude(), locationStart.getLatitude() };
         double[] coordinatesLast = new double[]{ locationEnd.getLongitude(), locationEnd.getLatitude() };
 
+        String vet = coordinatesStart[0] + "&" + coordinatesStart[1] + "&"+coordinatesLast[0] + "&" + coordinatesLast[1];
+
         // Estamos dentro da velocidade e não atingimos o final de um segmento, vamos adicionar a distância entre os pares de coordenadas à distância total do segmento.
         if ( isWithinSpeed( lineSpeed ) && !isSegmentEnd() ) {
             // Anexa a distância entre os pontos de coordenadas à distância total.
@@ -253,9 +254,8 @@ public class SegmentHandler {
             segmentCoordinates.add(coordinatesStart);
             // O segmento está pronto, adicione a última coordenada.
             segmentCoordinates.add(coordinatesLast);
-
             // Este é o fim de um segmento, vamos enviá-lo para finalização.
-            finalizeSegment(uniqueID, totalAccumulatedDistance, segmentCoordinates, surfaceDoctorPoints);
+            finalizeSegment(uniqueID, totalAccumulatedDistance, segmentCoordinates, surfaceDoctorPoints, coordinatesStart[0],coordinatesStart[1],coordinatesLast[0] ,coordinatesLast[1]);
 
             // Vamos redefinir para o próximo segmento.
             // TODO: Isso é seguro aqui?
@@ -278,8 +278,7 @@ public class SegmentHandler {
      *
      *  Executa quando o limite de distância do segmento foi atingido.      *
      */
-    private void finalizeSegment(String id ,double distance, ArrayList<double[]> polyline, List<SurfaceDoctorPoint> measurements) {
-
+    private void finalizeSegment(String id ,double distance, ArrayList<double[]> polyline, List<SurfaceDoctorPoint> measurements, double lati, double longi, double latf, double longf ) {
         // Cria o cabeçalho para a tabela de saída.
         StringBuilder tableString = new StringBuilder("id,AccPhoneX,AccPhoneY,AccPhoneZ,AccEarthX,AccEarthY,AccEarthZ,");
         tableString.append("GravityX,GravityY,GravityZ,");
@@ -326,7 +325,7 @@ public class SegmentHandler {
         totalIRIEarth[1] = (totalVerticalDisplacementEarth[1] * 1000) / distance;
         totalIRIEarth[2] = (totalVerticalDisplacementEarth[2] * 1000) / distance;
 
-        /////// tentando media - QUALQUER coisa excluir essa parte ate embaixo do string iriMedia
+        /////// tentando media IRI - QUALQUER coisa excluir essa parte ate embaixo do string iriMedia
         double irimedia;
         double t1, t2, t3;
         t1 = totalIRIPhone[0];
@@ -360,15 +359,14 @@ public class SegmentHandler {
             referencia.push().setValue(jsonContent);
 
         // Enviando para a API
-        salvarIRI(iriMedia, test, id);
+        salvarIRI(iriMedia, lati, longi, latf, longf , id);
         // (iriMedia, id, test) parte adicionada, qlqr coisa so deixar o () vazio, "()"
 
     }
     // RETROFIT SALVANDO IRI
-    private void salvarIRI(String iriMedia, String test, String id ){
+    private void salvarIRI(String iriMedia, double lati, double longi, double latf, double longf, String id ){
         //configura objeto IRI
-
-      IRI iri = new IRI(iriMedia, test, id );
+        IRI iri = new IRI(iriMedia, lati, longi, latf, longf, id );
         //recupera o servico e salva a postagem
         IRIService service = retrofit.create(IRIService.class);
         Call<IRI> call = service.salvarIRI(iri);
