@@ -2,9 +2,12 @@ package bmodel;
 
 public class ListaIRI {
     private String iri;
-    private String endereco;
-    private String nome;
-    private Long id;
+    private double lati;
+    private double longi;
+    private double latf;
+    private double longf;
+    private String id;
+
 
     public String getIri() {
         return iri;
@@ -14,28 +17,43 @@ public class ListaIRI {
         this.iri = iri;
     }
 
-    public String getEndereco() {
-        return endereco;
+    public double getLati() {
+        return lati;
     }
 
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
+    public void setLati(double lati) {
+        this.lati = lati;
     }
 
-    public String getNome() {
-        return nome;
+    public double getLongi() {
+        return longi;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setLongi(double longi) {
+        this.longi = longi;
     }
 
-    public Long getId() {
+    public double getLatf() {
+        return latf;
+    }
+
+    public void setLatf(double latf) {
+        this.latf = latf;
+    }
+
+    public double getLongf() {
+        return longf;
+    }
+
+    public void setLongf(double longf) {
+        this.longf = longf;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
-
 }

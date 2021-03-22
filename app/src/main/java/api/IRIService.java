@@ -27,8 +27,12 @@ public interface IRIService {
     @POST("/post")
     Call<IRI>salvarIRI(
             @Field("iri") String iri,
-            @Field("endereco") String endereco,
-            @Field("nome") String nome
+            @Field("lati") double lati,
+            @Field("longi") double longi,
+            @Field("latf") double latf,
+            @Field("longf") double longf,
+            @Field("id") String id
+
     );
 
 }

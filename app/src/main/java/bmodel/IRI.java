@@ -7,7 +7,6 @@ public class IRI {
     private double longi;
     private double latf;
     private double longf;
-    private String nome;
     private String id;
 
 
@@ -90,18 +89,6 @@ public class IRI {
      */
     public void setLongf(double longf) {
         this.longf = longf;
-    }
-    /**
-     * @return the nome
-     */
-    public String getNome() {
-        return nome;
-    }
-    /**
-     * @param nome the nome to set
-     */
-    public void setNome(String nome) {
-        this.nome = nome;
     }
     /**
      * @return the id
