@@ -42,7 +42,8 @@ public class SegmentHandler {
 
     // Parâmetros de entrada do usuário padrão.
     private boolean units = true;
-    private int maxDistance = 100;
+    // a variavel maxDistance é a distancia entre os calculos do IRI em metros, se deixar em 0, vai ficar calculando CONTINUAMENTE..
+    private int maxDistance = 0;
     private int maxSpeed = 8000;
     private int minSpeed = 20;
 
@@ -126,7 +127,7 @@ public class SegmentHandler {
 
         // CONFIGURAÇÃO DO RETROFIT E DO CONVERSOR - usando o retrofit para api rest
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://191.252.223.6.xip.io:10000/")
+                .baseUrl("http://191.252.223.6.nip.io:10000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -360,6 +361,7 @@ public class SegmentHandler {
 
         // Enviando para a API
         salvarIRI(iriMedia, lati, longi, latf, longf , id);
+
         // (iriMedia, id, test) parte adicionada, qlqr coisa so deixar o () vazio, "()"
 
     }

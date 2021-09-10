@@ -17,7 +17,7 @@ public interface IRIService {
     @GET("/get")
     Call<IRI> recuperarIRI();
 
-    @GET("/endereco/{endereco}")
+    @GET("/get")
     Call<List<ListaIRI>> recuperarListaIRI();
 
     @POST("/post")

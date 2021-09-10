@@ -13,6 +13,8 @@ import SurfaceDoctor.SurfaceDoctorInterface;
 
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Build;
@@ -104,6 +106,7 @@ import java.util.logging.LogRecord;
 
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 import static java.security.AccessController.getContext;
+import static org.osmdroid.views.overlay.Polyline.*;
 
 // TODO: https://blog.fossasia.org/comparing-different-graph-view-libraries-and-integrating-them-in-pslab-android-application/
 
@@ -114,6 +117,9 @@ public class MainActivity extends AppCompatActivity
     // salvar dados no firebase e recuperar a referencia para a raiz do firebase
     private DatabaseReference referencia = FirebaseDatabase.getInstance().getReference();
 
+
+    private static final int COLOR_BLACK_ARGB = 0xff000000;
+    private static final int POLYLINE_STROKE_WIDTH_PX = 12;
     // autenticando usuario
     //private FirebaseAuth usuario = FirebaseAuth.getInstance();
 
@@ -176,11 +182,12 @@ public class MainActivity extends AppCompatActivity
         public void onClick(View v) {
 
             // salvarIRI();
-            recuperarIRI();
+            //recuperarIRI();
             // TODO: O usuário precisa de feedback visual do estado atual do botão.
             // TODO: Os booleanos precisam ser movidos para o final da função. Eles podem ser um retorno da função?
             if (!isToggleRecordingButtonClicked) {
                 toggleRecordingClickedOn();
+                recuperarListasIRIRetrofit();
             } else {
                 toggleRecordingClickedOff();
             }
@@ -207,9 +214,11 @@ public class MainActivity extends AppCompatActivity
 
         //retrofit
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://191.252.223.6.xip.io:10000/")
+                .baseUrl("http://191.252.223.6.nip.io:10000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
+
+        recuperarIRI();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -380,13 +389,28 @@ public class MainActivity extends AppCompatActivity
     public void recuperarIRI(){
         IRIService iriService = retrofit.create(IRIService.class);
         Call<IRI> call = iriService.recuperarIRI();
-
         //criar a requisição
         call.enqueue(new Callback<IRI>() {
             @Override
             public void onResponse(Call<IRI> call, Response<IRI> response) {
                 if( response.isSuccessful() ){
                     IRI iri = response.body();
+                    RoadManager roadManager = new OSRMRoadManager(MainActivity.this);
+                    ArrayList<GeoPoint> point = new ArrayList<>();
+                    GeoPoint ini = new GeoPoint(iri.getLongi(), iri.getLati());
+                    GeoPoint fin = new GeoPoint(iri.getLongf(), iri.getLatf());
+                    String indi = iri.getIri();
+                    Double indiceIRI = Double.parseDouble(indi);
+                    point.add(ini);
+                    point.add(fin);
+                        Road road = roadManager.getRoad(point);
+                        final Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                osm.getOverlays().add(roadOverlay);
+                            }
+                        });
                 }
             }
 
@@ -409,6 +433,23 @@ public class MainActivity extends AppCompatActivity
 
                     for (int i=0; i<listaIri.size(); i++){
                         ListaIRI listaIRI = listaIri.get( i );
+                       // Log.d ("IRI: ", "ID: " + listaIRI.getIri() + "/" + listaIRI.getId());
+                        RoadManager roadManager = new OSRMRoadManager(MainActivity.this);
+                        ArrayList<GeoPoint> point = new ArrayList<>();
+                        GeoPoint ini = new GeoPoint(listaIRI.getLongi(), listaIRI.getLati());
+                        GeoPoint fin = new GeoPoint(listaIRI.getLongf(), listaIRI.getLatf());
+                        String indi = listaIRI.getIri();
+                        Double indiceIRI = Double.parseDouble(indi);
+                        point.add(ini);
+                        point.add(fin);
+                        Road road = roadManager.getRoad(point);
+                        final Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                osm.getOverlays().add(roadOverlay);
+                            }
+                        });
                     }
                 }
             }
@@ -939,5 +980,34 @@ public class MainActivity extends AppCompatActivity
                 osm.getOverlays().add(roadOverlay);
             }
         });
+
     }
+    /*
+    //testar
+    // plotando a região do IRI calculado
+    public void PlotarIRI(String iriMedia, double lati, double longi, double latf, double longf) {
+        RoadManager roadManager = new OSRMRoadManager(this);
+        ArrayList<GeoPoint> point = new ArrayList<>();
+        double iri = Double.parseDouble(iriMedia);
+        GeoPoint ini;
+        GeoPoint fin;
+        ini = new GeoPoint(lati, longi);
+        fin = new GeoPoint(latf, longf);
+        point.add(ini);
+        point.add(fin);
+        Road road = roadManager.getRoad(point);
+        if (iri <= 1.2) {
+            final Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    osm.getOverlays().add(roadOverlay);
+                }
+            });
+        } else if (iri > 1.2) {
+
+        } else {
+
+        }
+    } */
 }
